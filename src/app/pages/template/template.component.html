@@ -56,6 +56,41 @@
              placeholder="Correo electrónico">
     </div>
   </div>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Pais</label>
+    <div class="col-8">
+      <select class="form-control" name="pais" 
+      [class.is-invalid]="pais.invalid && pais.touched" 
+      [ngModel]="usuario.pais" 
+      #pais="ngModel" require id="pais" [disabled]="paises.length==0" >
+        <option *ngFor="let pais of paises" value="{{ pais.codigo }}">{{ pais.nombre }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Genero</label>
+    <div class="col-8">
+      <div class="form-check form-check-inline">
+        <input type="radio" 
+        ngModel
+        required
+        #genero="ngModel"
+        class="form-check-input" value="M" name="genero" 
+        [class.is-invalid]="genero.invalid && genero.touched"
+        id=""><label>Masculino</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="radio" 
+        ngModel
+        required
+        #genero="ngModel"
+        class="form-check-input" value="F" name="genero" 
+        [class.is-invalid]="genero.invalid && genero.touched"
+        id=""><label>Femenino</label>
+      </div>
+      
+    </div>
+  </div>
 
 
 
