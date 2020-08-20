@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-reactive',
@@ -11,6 +11,7 @@ export class ReactiveComponent implements OnInit {
   forma:FormGroup;
   constructor(private fb:FormBuilder) { 
     this.crearFormulario(); 
+    this.cargarDataAllFormulario();
   }
 
   ngOnInit(): void {
@@ -30,6 +31,9 @@ export class ReactiveComponent implements OnInit {
   get ciudadNoValido(){
     return this.forma.get('direccion.ciudad').invalid && this.forma.get('direccion.ciudad').touched;
   }
+  get pasatiempos(){
+    return this.forma.get('pasatiempos') as FormArray;
+  }
   crearFormulario(){
     this.forma = this.fb.group({
       nombre:['',[Validators.required,Validators.minLength(5)]],
@@ -38,8 +42,21 @@ export class ReactiveComponent implements OnInit {
       direccion:this.fb.group({
         distrito:['',Validators.required],
         ciudad:['',Validators.required],
-      })
+      }),
+      pasatiempos:this.fb.array([
+      ]),
     });
+  }
+  cargarDataAllFormulario(){
+    // this.forma.setValue({
+    //   nombre:'luis',
+    //   apellido:'mayta',
+    //   correo:'luis.mayta@gmail.com',
+    //   direccion:{
+    //     distrito:'San Juan de Lurigancho',
+    //     ciudad:'Lima',
+    //   }
+    // })
   }
   guardar(){
     console.log(this.forma);
@@ -55,6 +72,14 @@ export class ReactiveComponent implements OnInit {
       })
       
     }
+    // Posteo de informacion
+    this.forma.reset();
+  }
+  agregarPasatiempo(){
+    this.pasatiempos.push(this.fb.control('Nuevo elemento'))
+  }
+  borrarPasatiempo(i:number){
+    this.pasatiempos.removeAt(i);
   }
 
 }
