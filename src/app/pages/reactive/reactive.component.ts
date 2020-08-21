@@ -13,6 +13,7 @@ export class ReactiveComponent implements OnInit {
   constructor(private fb:FormBuilder,private validadores:ValidadoresService) { 
     this.crearFormulario(); 
     this.cargarDataAllFormulario();
+    this.crearListeners();
   }
 
   ngOnInit(): void {
@@ -43,6 +44,9 @@ export class ReactiveComponent implements OnInit {
       const pass2 = this.forma.get('pass2').value;
       return (pass1 === pass2) ? false:true;
   }
+  get usuarioNoValido(){
+    return this.forma.get('usuario').invalid && this.forma.get('usuario').touched;
+  }
   crearFormulario(){
     this.forma = this.fb.group({
       nombre:['',[Validators.required,Validators.minLength(5)]],
@@ -56,20 +60,36 @@ export class ReactiveComponent implements OnInit {
       ]),
       pass1:['',[Validators.required]],
       pass2:['',[Validators.required]],
+      usuario:['',,this.validadores.existeUsuarios],
     },{
       validators:[ this.validadores.passwordsIguales('pass1','pass2')]
     });
   }
+  crearListeners(){
+    this.forma.valueChanges.subscribe( valor=>{
+      console.log(valor);
+    });
+    this.forma.statusChanges.subscribe(valor =>{
+      console.log('status');
+    })
+    this.forma.get('nombre').valueChanges.subscribe(valor =>{
+      console.log('nombre values change');
+    });
+    
+  }
   cargarDataAllFormulario(){
     // this.forma.setValue({
-    //   nombre:'luis',
-    //   apellido:'mayta',
-    //   correo:'luis.mayta@gmail.com',
-    //   direccion:{
-    //     distrito:'San Juan de Lurigancho',
-    //     ciudad:'Lima',
-    //   }
-    // })
+    this.forma.reset({
+      nombre:'luis',
+      apellido:'mayta',
+      correo:'luis.mayta@gmail.com',
+      pass1:'321654987',
+      pass2:'321654987',
+      direccion:{
+        distrito:'San Juan de Lurigancho',
+        ciudad:'Lima',
+      }
+    })
   }
   guardar(){
     console.log(this.forma);
